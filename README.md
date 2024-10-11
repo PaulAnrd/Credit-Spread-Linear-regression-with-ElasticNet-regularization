@@ -22,7 +22,12 @@ First of all, we made a comparison between y and y_pred, which involves comparin
 
 
 ### 3. What parameters have you exposed to users of your implementation in order to tune performance?
-
+These parameters are exposed to the user in this implementation, so that we can tune the performance of the ElasticNet model. The alpha parameter determines the overall strength of regularisation, i.e., increasing this parameter makes it more regularised and so lower values for the model coefficients are produced, reducing over-fitting. The l1_ratio parameter determines the balance between L1 (Lasso) and L2 (Ridge) regularisation. The closer this value gets to 1, the more L1 regularisation is used, which aims for feature selection. The closer it is to 0, the more Ridge regularisation is used. This means that large coefficient values can be stopped from happening but they won’t be forced to zero. The max_iter parameter determines the maximum number of iterations that the gradient descent is performed on and makes a difference to whether the model converges within those iterations or not. The tolerance value tol determines when to stop optimising the model – if the change in the model weights between iterations falls below the tolerance, the algorithm stops. So a smaller value for tol gives a more precise model, at the cost of more computation being needed.
 
 
 ### 4. Are there specific inputs that your implementation has trouble with? Given more time,could you work around these or is it fundamental to the model?
+Our ElasticNet implementation handles most types of data well, but there are a few situations where it could run into trouble. For example, highly correlated features (multicollinearity) might slow down convergence or cause instability. ElasticNet helps with this, but in extreme cases, tweaking the L1 and L2 balance (reducing the l1_ratio) or normalizing the data could improve things.
+
+Similarly, sparse data with lots of zeros could make the model slow to converge, especially if the alpha value is high. Reducing alpha or leaning more toward L2 regularization would help speed things up. Finally, imbalanced data or non-linear relationships might trip up the model, since it assumes linearity and doesn’t account for imbalances in the target variable. You’d likely need to handle this by preprocessing the data or adjusting the loss function.
+
+In short, these issues can be mitigated with tuning and data prep, and aren’t fundamental problems with the model itself.
